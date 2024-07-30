@@ -6,6 +6,9 @@ TagManager:
   tags:
   - hand
   - table
+  - block
+  - target
+  - head
   layers:
   - Default
   - TransparentFX

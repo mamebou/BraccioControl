@@ -11,13 +11,18 @@ public class RobotController : MonoBehaviour
     private bool isDownButtonPress = false;
     private bool isFrontButtonPress = false;
     private bool isBackButtonPress = false;
+    private bool isUpRotButtonPress = false;
+    private bool isDownRotBuuttonPress = false;
     public GameObject IKControl;
     Vector3 position;
+    public Vector3 rotation;
+    public bool isGrab = false;
 
     // Start is called before the first frame update
     void Start()
     {
         position = IKControl.transform.position;
+        rotation = IKControl.transform.rotation.eulerAngles;
     }
 
     // Update is called once per frame
@@ -58,6 +63,16 @@ public class RobotController : MonoBehaviour
         {
             position.z -= 0.0001f;
             IKControl.transform.position = position;
+        }
+
+        if(isUpRotButtonPress){
+            if(rotation.z >= -90f)
+                rotation.z += -0.06f;
+        }
+
+        if(isDownRotBuuttonPress){
+            if(rotation.z <= 90f)
+                rotation.z += 0.06f;
         }
     }
 
@@ -120,4 +135,25 @@ public class RobotController : MonoBehaviour
     {
         isBackButtonPress = false;
     }
+
+    public void UpRotButtonPress(){
+        isUpRotButtonPress = true;
+    }
+
+    public void UpRotButtonReleese(){
+        isUpRotButtonPress = false;
+    }
+
+    public void DownRotButtonPress(){
+        isDownRotBuuttonPress = true;
+    }
+
+    public void DownRotButtonReleese(){
+        isDownRotBuuttonPress = false;
+    }
+
+    public void grab(){
+        isGrab = !isGrab;
+    }
+
 }

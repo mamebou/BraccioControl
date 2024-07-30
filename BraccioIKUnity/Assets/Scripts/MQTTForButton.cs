@@ -7,10 +7,10 @@ using MQTTnet.Client;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MQTTTest : MonoBehaviour
+public class MQTTForBUtton : MonoBehaviour
 {
     IMqttClient mqttClient;
-    SolveIK IK;
+    SolveIKButton IK;
     public GameObject aolver;
     private bool isConnect = false;
     private int count = 0;
@@ -34,7 +34,7 @@ public class MQTTTest : MonoBehaviour
     {
         var factory = new MqttFactory();
         mqttClient = factory.CreateMqttClient();
-        IK = aolver.GetComponent<SolveIK>();
+        IK = aolver.GetComponent<SolveIKButton>();
         tracker = handTracker.GetComponent<HandTrackingTest>();
 
         var options = new MqttClientOptionsBuilder()
@@ -109,7 +109,6 @@ public class MQTTTest : MonoBehaviour
     async void Update(){
         count++;
         if(count == 10){
-            Debug.Log(isGrip + " fgfsdfsfds");
             if(isGrip){
                 IK.thetaGripper = 80f;
             }
@@ -142,8 +141,7 @@ public class MQTTTest : MonoBehaviour
                 
             }
             catch{
-                Debug.Log(isConnect);
-                Debug.Log("could not send");
+  
             }
             count = 0;
         }

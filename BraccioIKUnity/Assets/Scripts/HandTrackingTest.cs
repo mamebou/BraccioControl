@@ -29,6 +29,7 @@ public class HandTrackingTest : MonoBehaviour
     public bool resetRobot = false;
     public GameObject IKsolver;
     private SolveIK IK;
+    public GameObject directionText;
 
 
     void Start()
@@ -95,6 +96,7 @@ public class HandTrackingTest : MonoBehaviour
                         if(countDown < 0f){
                             isFinishCount = true;
                             homePosition.SetActive(false);
+                            directionText.SetActive(false);
                         }
                     }
                     else{
@@ -125,6 +127,7 @@ public class HandTrackingTest : MonoBehaviour
         resetButton.SetActive(false);
         if(!isFinishCount){
             homePosition.SetActive(true);
+            directionText.SetActive(true);
         }
         isStart = true;
     }

@@ -5,7 +5,7 @@ using UnityEngine;
 using System.Collections;
 using TMPro;
 
-public class SolveIK : MonoBehaviour {
+public class SolveIKButton : MonoBehaviour {
 
 	public bool useIK = true; // IK mode or manual adjustment
 	public bool autoEnd = true; // horizontal end in IK mode
@@ -13,9 +13,11 @@ public class SolveIK : MonoBehaviour {
 	public Vector3 targetPosition;
 	public Vector3 currentPosition;
 	public GameObject mqtt;
-	private MQTTTest mqttTest;
+	private MQTTForBUtton mqttTest;
+	public GameObject UIController;
+	private RobotController controller;
 	public GameObject handTracker;
-	private HandTrackingTest tracker;
+	private HandTrackingButton tracker;
 	public bool resetPublish = false;
 	public Vector3 initialTargetPosition;
 
@@ -48,8 +50,9 @@ public class SolveIK : MonoBehaviour {
 		/* pre-calculations */
 		hum_sq = HUMERUS*HUMERUS;
 		uln_sq = ULNA*ULNA;
-		mqttTest = mqtt.GetComponent<MQTTTest>();
-		tracker = handTracker.GetComponent<HandTrackingTest>();
+		mqttTest = mqtt.GetComponent<MQTTForBUtton>();
+		tracker = handTracker.GetComponent<HandTrackingButton>();
+		controller = UIController.GetComponent<RobotController>();
 		initialTargetPosition = targetPosition;
 	}
 
@@ -66,13 +69,13 @@ public class SolveIK : MonoBehaviour {
 			SetArm(targetPosition.x, targetPosition.y, targetPosition.z, autoEnd);
 		}
 		// Update robot arm model withou gripper
-		thetaWristVertical = this.transform.rotation.eulerAngles.x;
+		thetaWristVertical = mqttTest.thetaWristVertical;
 		thetaWristRotation = this.transform.rotation.eulerAngles.z;
 		arms[0].transform.localRotation = Quaternion.Euler(new Vector3(0f, thetaBase, 0f));
 		arms[1].transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, thetaShoulder - 90f));
 		arms[2].transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, thetaElbow - 90f));
-		arms[3].transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, thetaWristVertical));
-		arms[4].transform.localRotation = Quaternion.Euler(new Vector3(0f, mqttTest.thetaWristRotation, 0f));
+		arms[3].transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, controller.rotation.z));
+		arms[4].transform.localRotation = Quaternion.Euler(new Vector3(0f, 90f, 0f));
 
 		// Debug.Log(thetaBase);
 		//Debug.Log(thetaShoulder - 90f);
