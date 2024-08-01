@@ -617,6 +617,7 @@ MonoBehaviour:
   hololensTopic: mytopic/mqtt
   testTopic: mytopic/test
   wait: 1
+  textArea: {fileID: 69916805}
 --- !u!4 &658642364
 Transform:
   m_ObjectHideFlags: 0

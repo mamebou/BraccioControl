@@ -6,6 +6,7 @@ using MQTTnet;
 using MQTTnet.Client;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MQTTTest : MonoBehaviour
 {
@@ -29,6 +30,9 @@ public class MQTTTest : MonoBehaviour
     private float currentThetaWristVertical = 0f;
     int gripCount = 5;
     bool changeGrip = true;
+    float inputValue = 0f;
+    public GameObject textArea;
+    private TMPro.TMP_Text text;
 
     async void Start()
     {
@@ -36,6 +40,7 @@ public class MQTTTest : MonoBehaviour
         mqttClient = factory.CreateMqttClient();
         IK = aolver.GetComponent<SolveIK>();
         tracker = handTracker.GetComponent<HandTrackingTest>();
+        text = textArea.GetComponent<TMPro.TMP_Text>();
 
         var options = new MqttClientOptionsBuilder()
             .WithTcpServer("broker.emqx.io")
@@ -71,8 +76,10 @@ public class MQTTTest : MonoBehaviour
         mqttClient.ApplicationMessageReceived += (s, e) =>
         {
             string[] data = Encoding.UTF8.GetString(e.ApplicationMessage.Payload).Split(' ');
+            Debug.Log(data[0]);
             int pressure = int.Parse(data[2]);
-            if(pressure > 2000){
+            inputValue = float.Parse(data[1]);
+            if(pressure > 3800){
                 gripCount--;
                 if(gripCount < 0 && changeGrip){
                     isGrip = !isGrip;
@@ -81,35 +88,36 @@ public class MQTTTest : MonoBehaviour
                 }
             }
 
-            if(pressure < 200){
+            if(pressure < 700){
                 gripCount--;
                 if(gripCount < 0){
                     changeGrip = true;
+                    gripCount = 5;
                 }
             }
-                if(tracker.isFinishCount && tracker.isStart){
-                    currentThetaWristVertical = roundOnePlace(float.Parse(data[1]));
-                    if(prevThetaWristVertical == currentThetaWristVertical && currentThetaWristVertical == secondPrevThetaWristVertical){
-                        thetaWristVertical = roundOnePlace(float.Parse(data[1]));
-                    }
-                    prevThetaWristVertical = currentThetaWristVertical;
-                    secondPrevThetaWristVertical = prevThetaWristVertical;
-                }
 
-                rcvCount++;
-                wait = false;
+            if(tracker.isFinishCount && tracker.isStart){
+                if(inputValue > 50f && thetaWristVertical <= 90f){
+                    thetaWristVertical += 5f;
+                }
+                else if(inputValue < -60f && thetaWristVertical >= -90f){
+                    thetaWristVertical -= 5f;
+                }
+            }
+
+
         };
 
         await mqttClient.ConnectAsync(options);
 
-        await mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("emqx/esp32").Build());
+        await mqttClient.SubscribeAsync(new TopicFilterBuilder().WithTopic("emqx/mySystemTopic").Build());
 
     }
 
     async void Update(){
         count++;
-        if(count == 10){
-            Debug.Log(isGrip + " fgfsdfsfds");
+        if(count == 20){
+            text.text = isGrip.ToString();
             if(isGrip){
                 IK.thetaGripper = 80f;
             }
@@ -136,14 +144,12 @@ public class MQTTTest : MonoBehaviour
 
             try{
                 if(tracker.isFinishCount && tracker.isStart){
-                    Debug.Log("publish");
                     await mqttClient.PublishAsync(message);
                 }
                 
             }
             catch{
-                Debug.Log(isConnect);
-                Debug.Log("could not send");
+
             }
             count = 0;
         }
