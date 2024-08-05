@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExperimentManager : MonoBehaviour
 {
-    public float[] accuracyResult = new float[3]; 
+    public float[] accuracyResult = new float[3] {0.0f, 0.0f, 0.0f}; 
     public int index = 0;
     // Start is called before the first frame update
     void Start()

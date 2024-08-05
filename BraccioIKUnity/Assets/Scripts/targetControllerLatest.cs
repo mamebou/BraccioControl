@@ -22,7 +22,6 @@ public class targetControllerLatest : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "block"){
-            Debug.Log("hgvjfkhgskjhfglsdhfd");
             exManager.accuracyResult[exManager.index] = Vector3.Distance(this.transform.position, collision.gameObject.transform.position);
             exManager.index += 1;
             Destroy(collision.gameObject);

@@ -29,12 +29,23 @@ public class HandTrackingButton : MonoBehaviour
     public bool resetRobot = false;
     public GameObject IKsolver;
     private SolveIK IK;
+    private Vector3 initialStartBtnPos;
+    private Vector3 initialResetBtnPos;
+    private Vector3 afterStartBtnPos;
+    private Vector3 afterResetBtnPos;
 
 
     void Start()
     {
 
         IK = IKsolver.GetComponent<SolveIK>();
+        initialStartBtnPos = startButton.transform.position;
+        initialResetBtnPos = resetButton.transform.position;
+        afterStartBtnPos = initialResetBtnPos;
+        afterResetBtnPos = initialResetBtnPos;
+        afterResetBtnPos.x = 10000f;
+        afterStartBtnPos.x = 10000f;
+
 
     }
 
@@ -47,8 +58,8 @@ public class HandTrackingButton : MonoBehaviour
     public void start(){
         isStart = true;
 
-        startButton.SetActive(false);
-        resetButton.SetActive(false);
+        startButton.transform.position = afterStartBtnPos;
+        resetButton.transform.position = afterResetBtnPos;
     }
 
     public void reset(){
@@ -63,8 +74,8 @@ public class HandTrackingButton : MonoBehaviour
     public void menue(){
 
             isStart = false;
-            startButton.SetActive(true);
-            resetButton.SetActive(true);
+            startButton.transform.position = initialStartBtnPos;
+            resetButton.transform.position = initialResetBtnPos;
 
     }
 
