@@ -53,7 +53,7 @@ public class SolveIKButton : MonoBehaviour {
 		mqttTest = mqtt.GetComponent<MQTTForBUtton>();
 		tracker = handTracker.GetComponent<HandTrackingButton>();
 		controller = UIController.GetComponent<RobotController>();
-		initialTargetPosition = targetPosition;
+		initialTargetPosition = this.gameObject.transform.position;
 	}
 
 	void Update () {

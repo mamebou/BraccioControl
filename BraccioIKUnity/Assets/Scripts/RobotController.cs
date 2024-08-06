@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class RobotController : MonoBehaviour
 {
@@ -17,17 +18,27 @@ public class RobotController : MonoBehaviour
     Vector3 position;
     public Vector3 rotation;
     public bool isGrab = false;
+    public GameObject textArea;
+    private TMPro.TMP_Text text;
+    //実験用
+    public GameObject exController;
+    private ExperimentManager exManager;
 
     // Start is called before the first frame update
     void Start()
     {
         position = IKControl.transform.position;
         rotation = IKControl.transform.rotation.eulerAngles;
+        text = textArea.GetComponent<TMPro.TMP_Text>();
+        //実験用
+        exManager = exController.GetComponent<ExperimentManager>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!exManager.finishExperiment)
+            text.text = isGrab.ToString();
         if (isRightButtonPress)
         {
             position.x += 0.0001f;
