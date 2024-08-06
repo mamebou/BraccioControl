@@ -6,6 +6,7 @@ using MQTTnet;
 using MQTTnet.Client;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MQTTForBUtton : MonoBehaviour
 {
@@ -28,7 +29,8 @@ public class MQTTForBUtton : MonoBehaviour
     private float secondPrevThetaWristVertical = 0f;
     private float currentThetaWristVertical = 0f;
     int gripCount = 5;
-    bool changeGrip = true;
+    bool changeGrip = true;    
+
 
     async void Start()
     {
@@ -107,7 +109,7 @@ public class MQTTForBUtton : MonoBehaviour
     }
 
     async void Update(){
-        count++;
+        count++;;
         if(count == 10){
             if(isGrip){
                 IK.thetaGripper = 80f;
