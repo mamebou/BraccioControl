@@ -31,12 +31,19 @@ public class HandTrackingTest : MonoBehaviour
     private SolveIK IK;
     public GameObject directionText;
 
+    //実験用
+    public GameObject exController;
+    private ExperimentManager exManager;
+
 
     void Start()
     {
         indexTip = GameObject.CreatePrimitive(PrimitiveType.Cube);  
         indexTip.transform.localScale = new Vector3(0.03f, 0.03f, 0.03f);  
         IK = IKsolver.GetComponent<SolveIK>();
+
+        //実験用
+        exManager = exController.GetComponent<ExperimentManager>();
 
     }
 
@@ -129,7 +136,16 @@ public class HandTrackingTest : MonoBehaviour
             homePosition.SetActive(true);
             directionText.SetActive(true);
         }
+
+        
         isStart = true;
+
+        //実験用
+        if(!exManager.startExperiment){
+            exManager.startExperiment = true;
+            exManager.startTime = DateTime.Now;
+
+        }
     }
 
     public void reset(){

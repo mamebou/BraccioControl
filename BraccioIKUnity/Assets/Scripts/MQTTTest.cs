@@ -76,7 +76,7 @@ public class MQTTTest : MonoBehaviour
         mqttClient.ApplicationMessageReceived += (s, e) =>
         {
             string[] data = Encoding.UTF8.GetString(e.ApplicationMessage.Payload).Split(' ');
-            Debug.Log(data[0]);
+
             int pressure = int.Parse(data[2]);
             inputValue = float.Parse(data[1]);
             if(pressure > 3800){
